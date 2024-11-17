@@ -2,15 +2,16 @@
   "name": "wss-1",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "dev": "npx nodemon ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "ws": "^8.18.0",
-    "wss": "^3.3.4"
+    "socket.io": "^4.8.1"
   }
 }
