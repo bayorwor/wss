@@ -29,9 +29,24 @@ const io = new Server(expressServer, {
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
+  // Upon connection send a message to the client
+  socket.emit("message", `You are connected: ${socket.id}`);
+
+  // Upon connection send a message to all clients
+  socket.broadcast.emit("message", `New user connected: ${socket.id}`);
+
   socket.on("message", (data) => {
     console.log(data);
 
     io.emit("message", `${socket.id.substring(0, 5)} : ${data}`);
+  });
+
+  // Upon disconnection send a message to all clients
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("message", `User disconnected: ${socket.id}`);
+  });
+
+  socket.on("activity", (data) => {
+    socket.broadcast.emit("activity", data);
   });
 });
