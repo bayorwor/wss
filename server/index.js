@@ -1,9 +1,23 @@
-import { createServer } from "http";
+import express from "express";
 import { Server } from "socket.io";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const httpServer = createServer();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const io = new Server(httpServer, {
+const PORT = process.env.PORT || 8000;
+
+const app = express();
+
+// serve static files
+app.use(express.static(path.join(__dirname, "public")));
+
+const expressServer = app.listen(PORT, () =>
+  console.log(`Server started on port ${PORT}`)
+);
+
+const io = new Server(expressServer, {
   cors: {
     origin:
       process.env.NODE_ENV === "production"
@@ -21,5 +35,3 @@ io.on("connection", (socket) => {
     io.emit("message", `${socket.id.substring(0, 5)} : ${data}`);
   });
 });
-
-httpServer.listen(8000, () => console.log("Server started on port 8000"));
